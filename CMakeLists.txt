@@ -17,8 +17,8 @@ include_directories("./SRC/Loader")
 include_directories("./SRC/Analyzer")
 include_directories("${CMAKE_BINARY_DIR}")	
 
-#find_package(Qt5 COMPONENTS Core Network)
-find_package (Qt4 4.8.4 REQUIRED QtCore QtNetwork)
-include (${QT_USE_FILE})
+find_package(Qt5 COMPONENTS Core Network)
+#find_package (Qt4 4.8.4 REQUIRED QtCore QtNetwork)
+#include (${QT_USE_FILE})
 
 add_subdirectory(SRC)

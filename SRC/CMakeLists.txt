@@ -6,8 +6,8 @@ function (add_project NAME ALLSOURCES)
    add_definitions("-std=c++11")
 
    add_executable(${NAME} ${ALLSOURCES})
-   #target_link_libraries(${NAME} Qt5::Core Qt5::Network)
-   target_link_libraries(${NAME} ${QT_LIBRARIES})
+   target_link_libraries(${NAME} Qt5::Core Qt5::Network)
+   #target_link_libraries(${NAME} ${QT_LIBRARIES})
 
 endfunction(add_project)
 

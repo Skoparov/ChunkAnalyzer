@@ -64,7 +64,7 @@ class ChunckReceiver : public QObject, public QRunnable
     Q_OBJECT
 
 public:
-    explicit ChunckReceiver(int descriptor, FileChunkCollectorPtr collector, QObject *parent = 0);
+    explicit ChunckReceiver(qintptr descriptor, FileChunkCollectorPtr collector, QObject *parent = 0);
 
     void run();
     const FileChunkCollectorPtr getCollector() const;
@@ -80,7 +80,7 @@ public slots:
 private:
 	FileChunkCollectorPtr mCollector;
 
-    int mSocketDescriptor;
+    qintptr mSocketDescriptor;
 	QTcpSocketPtr mSocket;
     QEventLoopPtr mEventLoop;
     BlockSize mNextBlockSize; 
@@ -111,7 +111,7 @@ private slots:
     void onReadCompleted();
 
 protected:
-    void incomingConnection(int socketDescriptor);
+    void incomingConnection(qintptr socketDescriptor);
 
 signals:
     void finished();

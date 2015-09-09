@@ -34,7 +34,7 @@ const QHash<quint64, quint64> ChunkCollector::getChunks() const
 ///                 ChunckReceiver             ///
 //////////////////////////////////////////////////
 
-ChunckReceiver::ChunckReceiver(int descriptor, FileChunkCollectorPtr collector, QObject *parent) :
+ChunckReceiver::ChunckReceiver(qintptr descriptor, FileChunkCollectorPtr collector, QObject *parent) :
     QObject(parent),  
 	mNextBlockSize(0),
     mSocketDescriptor(descriptor),
@@ -51,13 +51,19 @@ void ChunckReceiver::run()
 
 	mEventLoop = QEventLoopPtr(new QEventLoop());
 	mSocket = QTcpSocketPtr(new QTcpSocket());
-    connect(mSocket.get(),SIGNAL(disconnected()),this,SLOT(onDisconnect()),Qt::DirectConnection);
-	connect(mSocket.get(), SIGNAL(readyRead()), this, SLOT(onReadyRead()), Qt::DirectConnection);
+    connect(mSocket.get(),
+            SIGNAL(disconnected()),
+            this,
+            SLOT(onDisconnect()),Qt::DirectConnection);
+
+    connect(mSocket.get(),
+            SIGNAL(readyRead()),
+            this,
+            SLOT(onReadyRead()), Qt::DirectConnection);
 
     if(!mSocket->setSocketDescriptor(mSocketDescriptor)){
             emit error(mSocket->error());
     }
-
 
     mEventLoop->exec();
 
@@ -66,7 +72,7 @@ void ChunckReceiver::run()
 
 void ChunckReceiver::onReadyRead()
 {
-	QDataStream in(mSocket.get());
+	QDataStream in(mSocket.get());  
     if(!mNextBlockSize)
     {
         if(mSocket->bytesAvailable() < sizeof(mNextBlockSize)){
@@ -113,7 +119,7 @@ void ChunckReceiver::onReadyRead()
 	responseStream << mNextBlockSize;
 	mSocket->write(response);
 
-	mNextBlockSize = 0;
+	mNextBlockSize = 0;       
 }
 
 const FileChunkCollectorPtr ChunckReceiver::getCollector() const
@@ -132,7 +138,7 @@ void ChunckReceiver::onDisconnect()
 
 Analyzer::Analyzer(std::ostream* stream, QObject *parent) : QTcpServer(parent), mOutputStream(stream)
 {
-	QThreadPool::globalInstance()->setExpiryTimeout(0); //to make threads exit right after the job is done
+    QThreadPool::globalInstance()->setExpiryTimeout(0); //to make threads exit right after the job is done
 }
 
 bool Analyzer::startServer(const quint16 port)
@@ -182,8 +188,8 @@ void Analyzer::print()
 	emit finished();
 }
 
-void Analyzer::incomingConnection(int socketDescriptor)
-{
+void Analyzer::incomingConnection(qintptr socketDescriptor)
+{  
     FileChunkCollectorPtr collector (new ChunkCollector);
     ChunckReceiver* connection = new ChunckReceiver(socketDescriptor, collector);
     QThreadPool::globalInstance()->start(connection);

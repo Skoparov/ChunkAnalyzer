@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 	}
 	else //file
 	{				
-		ofstr.open(fileName.toAscii());	
+        ofstr.open(fileName.toLocal8Bit());
 		if (!ofstr.is_open()){
 			std::cout << QString("Cannot open file : %1").arg(fileName).toStdString();
 			return 1;

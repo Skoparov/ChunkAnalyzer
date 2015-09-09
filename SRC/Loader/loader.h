@@ -23,8 +23,6 @@ typedef std::unique_ptr<QEventLoop> QEventLoopPtr;
 typedef std::unique_ptr<QFile> QFilePtr;
 typedef quint64 Chunk;  /**< Elemental data to be collected */	
 typedef quint16 BlockSize; /**< Block is comprised of several chunks (at least one) */
- 
-Q_DECLARE_METATYPE(QAbstractSocket::SocketError);
 
 //////////////////////////////////////////////////
 ///                 Loader                      ///
